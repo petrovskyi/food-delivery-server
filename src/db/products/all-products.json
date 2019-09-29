@@ -69,5 +69,16 @@
 		"created": "21-08-2018",
 		"modified": "21-08-2018",
 		"categories": ["pizza"]
+	}, {
+		"id": 19112839,
+		"sku": 1120002,
+		"name": "test",
+		"description": "some text",
+		"price": "999",
+		"currency": "JPN",
+		"creatorId": 1,
+		"created": "21-08-2018",
+		"modified": "21-08-2018",
+		"categories": ["test"]
 	}
 ]

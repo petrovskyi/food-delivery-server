@@ -1,10 +1,15 @@
-const signUpRoute = require("./singup/signUpRoute");
-const productsRoute = require("./products/products");
+const mainRoute = require('./main/main');
+const imageRoute = require('./image/get-image');
+const getUser = require('./user/get-user');
+const handleProductsRoute = require('./products');
 
 const router = {
-  "/signup": signUpRoute,
-  "/products": productsRoute,
-  default: signUpRoute
+  '/me': mainRoute,
+  '/image': imageRoute,
+  '/users': getUser,
+  '/products': handleProductsRoute,
+  '/products/add-order': handleProductsRoute,
+  default: mainRoute
 };
 
 module.exports = router;
