@@ -10,7 +10,4 @@ module.exports = {
       products: data
     });
   }
-  //   ids :  data => {
-
-  //   }
 };

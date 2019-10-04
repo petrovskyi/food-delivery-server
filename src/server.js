@@ -13,18 +13,13 @@ const startServer = port => {
     const parsedUrl = url.parse(request.url);
 
     // Get router function
-    const func = getRouteHandler(router, parsedUrl.pathname) || router.default;
+    const func =
+      getRouteHandler(router, parsedUrl.pathname) ||
+      router.default;
 
-    // const myURL = new URL(`localhost:${port}/${request.url}`);
-    // console.log(myURL.searchParams.get("ids").length > 0);
-
-    // console.log(myURL.searchParams.get("ids").split(",").length);
-
-    // myURL.searchParams.get("ids") ? console.log("+") : console.log("-");
-    // console.log(url.parse(request.url).search);
-    // console.log(request.url.search());
-
-    logger(request, response, () => func(request, response));
+    logger(request, response, () =>
+      func(request, response)
+    );
   });
 
   server.listen(port);
