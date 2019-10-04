@@ -1,96 +1,65 @@
-const url = require("url");
 const fs = require("fs");
 const path = require("path");
-const dbProducts = require("./../../db/products/all-products.json");
-const search = require("../../helpers/answer");
-
-const filePath = path.join(
-  __dirname,
-  "../../../",
-  "src",
-  "db",
-  "products",
-  "all-products.json"
-);
-
-const json = fs.statSync(filePath);
+const helper = require("../../helpers/answer");
 
 const getProducts = (request, response) => {
+  const productsDbPath = path.join(
+    __dirname,
+    "../../db/products/all-products.json"
+  );
   const myURL = new URL(`localhost:8080${request.url}`);
+  const products = request.url === "/products";
+  const id = Number(request.url.split("/")[2]);
+  const ids = myURL.searchParams.get("ids");
+  const category = myURL.searchParams.get("category");
 
-  // if (request.url === "/products") {
-  //   response.writeHead(200, {
-  //     "Content-Type": "application/json",
-  //     "Content-Length": json.size
-  //   });
-  //   const readStream = fs.createReadStream(filePath);
-  //   readStream.pipe(response);
-  // }
+  fs.readFile(productsDbPath, "utf8", (error, contents) => {
+    const db = JSON.parse(contents);
 
-  if (Number(request.url.split("/")[2])) {
-    const findById = dbProducts.filter(
-      el => el.id === Number(request.url.split("/")[2])
-    );
+    if (error) {
+      console.log("Error -->" + error);
+      throw error;
+    }
 
     response.writeHead(200, {
       "Content-Type": "application/json"
     });
-    response.end(search.id(findById));
-  }
 
-  if (myURL.searchParams.get("ids")) {
-    let ids = myURL.searchParams.get("ids").split(",");
-    let iterator = ids[Symbol.iterator]();
-    let arr = [];
+    if (products) {
+      response.end(contents);
+    }
 
-    while (true) {
-      let result = iterator.next();
-      if (result.done) break;
-      let filteredItems = Object.assign(
-        {},
-        ...dbProducts.filter(
-          el => el.id.toString() === result.value
-        )
+    if (id) {
+      const findById = db.filter(
+        el => el.id === Number(request.url.split("/")[2])
       );
-      arr.push(filteredItems);
+      response.end(helper.answer(findById));
     }
-    const answer = JSON.stringify({
-      status: "success",
-      products: arr
-    });
-    response.writeHead(200, {
-      "Content-Type": "application/json"
-    });
-    response.end(answer);
-  }
-  if (myURL.searchParams.get("category")) {
-    const category = myURL.searchParams
-      .get("category")
-      .toString();
-    const data = dbProducts.filter(el =>
-      el.categories.includes(category)
-    );
 
-    if (data[0] === undefined) {
-      const answer = JSON.stringify({
-        status: "no products",
-        products: []
-      });
-      response.writeHead(200, {
-        "Content-Type": "application/json"
-      });
-      response.end(answer);
-    } else {
-      const answer = JSON.stringify({
-        status: "success",
-        products: data
-      });
-      response.writeHead(200, {
-        "Content-Type": "application/json"
-      });
-      response.end(answer);
+    if (ids) {
+      const idsArray = myURL.searchParams
+        .get("ids")
+        .split(",");
+      const filterByIds = db.filter(el =>
+        idsArray.includes(String(el.id))
+      );
+
+      response.end(helper.answer(filterByIds));
     }
-  }
+
+    if (category) {
+      const categoryString = String(
+        myURL.searchParams.get("category")
+      );
+      const data = db.filter(el =>
+        el.categories.includes(categoryString)
+      );
+
+      data.length === 0
+        ? response.end("can't find anything")
+        : response.end(helper.answer(data));
+    }
+  });
 };
 
 module.exports = getProducts;

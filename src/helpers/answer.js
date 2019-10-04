@@ -1,14 +1,16 @@
 module.exports = {
-  id: data => {
+  answer: data => {
     let dataStatus;
-    if (data.length === 0) {
-      dataStatus = "no products";
-    } else {
-      dataStatus = "success";
-    }
+    data.length === 0
+      ? (dataStatus = "no products")
+      : (dataStatus = "success");
+
     return JSON.stringify({
       success: dataStatus,
       products: data
     });
   }
+  //   ids :  data => {
+
+  //   }
 };
