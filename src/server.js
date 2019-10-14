@@ -2,10 +2,10 @@ const express = require("express");
 const corsMiddleware = require("cors");
 const addRequestId = require("express-request-id");
 
-const productsRoute = require("./products/products-routes");
-const usersRoute = require("./users/users-routes");
-const ordersRoute = require("./orders/orders-routes");
-const imageRoute = require("./image/image-routes");
+const productsRoute = require("./routes/products-routes");
+const usersRoute = require("./routes/users-routes");
+const ordersRoute = require("./routes/orders-routes");
+const imageRoute = require("./routes/image-routes");
 
 const app = express();
 

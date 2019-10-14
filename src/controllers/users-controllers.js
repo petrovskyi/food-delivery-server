@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const uuid = require("uuid");
-const { jsonUpdater } = require("./users-services");
+const { jsonUpdater } = require("../services/users-services");
 const json = path.join(__dirname, "../db/all-users.json");
 
 module.exports = {

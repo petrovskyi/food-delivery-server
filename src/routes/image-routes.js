@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const multer = require("multer");
 
-const imageConroller = require("./image-controller");
+const imageConroller = require("../controllers/image-controller");
 
 const router = Router();
 

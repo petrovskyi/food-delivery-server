@@ -6,7 +6,7 @@ const {
   jsonUpdater,
   checkUserById,
   checkAllProducts
-} = require("./orders-services");
+} = require("../services/orders-services");
 
 const usersJson = path.join(__dirname, "../db/all-users.json");
 const productsJson = path.join(__dirname, "../db/all-products.json");

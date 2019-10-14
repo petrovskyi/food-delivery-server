@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const search = require("./products-services");
+const search = require("../services/products-services");
 const products = path.join(__dirname, "../db/all-products.json");
 
 const getProducts = (req, res, next) => {
