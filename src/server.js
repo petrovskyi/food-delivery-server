@@ -1,28 +1,31 @@
-const http = require("http");
-const url = require("url");
-const fs = require("fs");
-const morgan = require("morgan");
-const router = require("./routes/router");
-const getRouteHandler = require("./helpers/get-route-handler");
+const express = require("express");
+const corsMiddleware = require("cors");
+const addRequestId = require("express-request-id");
 
-const logger = morgan("combined");
+const productsRoute = require("./products/products-routes");
+const usersRoute = require("./users/users-routes");
+const ordersRoute = require("./orders/orders-routes");
+const imageRoute = require("./image/image-routes");
 
-const startServer = port => {
-  const server = http.createServer((request, response) => {
-    // Get route from the request
-    const parsedUrl = url.parse(request.url);
+const app = express();
 
-    // Get router function
-    const func =
-      getRouteHandler(router, parsedUrl.pathname) ||
-      router.default;
+app
+  .use(express.json())
+  .use(corsMiddleware())
+  .use(addRequestId())
 
-    logger(request, response, () =>
-      func(request, response)
-    );
+  .use("/users", usersRoute)
+  .use("/products", productsRoute)
+  .use("/orders", ordersRoute)
+  .use("/image", imageRoute)
+
+  .use((err, req, res, next) => {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get("env") === "development" ? err : {};
+    // render the error page
+    res.status(err.status || 500);
+    res.send("error");
   });
 
-  server.listen(port);
-};
-
-module.exports = startServer;
+module.exports = app;

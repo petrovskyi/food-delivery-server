@@ -1,4 +1,6 @@
-const startServer = require('./src/server');
-const { port } = require('./config');
+const server = require("./src/server");
+const { port } = require("./config");
 
-startServer(port);
+server.listen(port, () => {
+  console.log(`Ganesha Server is ready :)`);
+});
